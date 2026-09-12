@@ -1,7 +1,7 @@
+import { speciesDataRegistry } from "#app/global-species-data-registry";
 import type { BattlerTag } from "#data/battler-tags";
 import { loadBattlerTag, SerializableBattlerTag } from "#data/battler-tags";
 import type { Gender } from "#data/gender";
-import { PokemonMove } from "#data/moves/pokemon-move";
 import type { PokemonSpeciesForm } from "#data/pokemon-species";
 import type { TypeDamageMultiplier } from "#data/type";
 import type { AbilityId } from "#enums/ability-id";
@@ -12,13 +12,13 @@ import type { PokemonType, RegularPokemonType } from "#enums/pokemon-type";
 import type { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#field/pokemon";
+import { PokemonMove } from "#moves/pokemon-move";
 import type { ObtainStatusEffectPhase } from "#phases/obtain-status-effect-phase";
 import type { AttackMoveResult } from "#types/attack-move-result";
 import type { IllusionData } from "#types/illusion-data";
 import type { SerializedSpeciesForm } from "#types/pokemon-common";
 import type { TurnMove } from "#types/turn-move";
 import type { CoerceNullPropertiesToUndefined } from "#types/type-helpers";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#utils/pokemon-utils";
 
 /**
  * Permanent data that can customize a Pokemon in non-standard ways from its Species.
@@ -62,7 +62,7 @@ function deserializePokemonSpeciesForm(value: SerializedSpeciesForm | PokemonSpe
     return null;
   }
 
-  return getPokemonSpeciesForm(id, formIdx);
+  return speciesDataRegistry.getPokemonSpeciesForm(id, formIdx);
 }
 
 interface SerializedIllusionData extends Omit<IllusionData, "fusionSpecies"> {
@@ -175,10 +175,10 @@ export class PokemonSummonData {
         if (illusionData.fusionSpecies != null) {
           switch (typeof illusionData.fusionSpecies) {
             case "object":
-              illusionData.fusionSpecies = getPokemonSpecies(illusionData.fusionSpecies.speciesId);
+              illusionData.fusionSpecies = speciesDataRegistry.getSpecies(illusionData.fusionSpecies.speciesId);
               break;
             case "number":
-              illusionData.fusionSpecies = getPokemonSpecies(illusionData.fusionSpecies);
+              illusionData.fusionSpecies = speciesDataRegistry.getSpecies(illusionData.fusionSpecies);
               break;
             default:
               illusionData.fusionSpecies = undefined;

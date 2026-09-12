@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import type { ModalConfig } from "#ui/modal-ui-handler";
+import type { ModalConfig } from "#types/ui-types";
 import { ModalUiHandler } from "#ui/modal-ui-handler";
 import { addTextObject } from "#ui/text";
 import { playTween } from "#utils/anim-utils";
@@ -14,10 +14,6 @@ export class AlertModalUiHandler extends ModalUiHandler {
 
   private width = 250;
   private height = 32;
-
-  constructor(mode: UiMode | null = null) {
-    super(mode);
-  }
 
   public override getModalTitle(): string {
     return "";
@@ -100,7 +96,7 @@ export class AlertModalUiHandler extends ModalUiHandler {
       return false;
     }
     const { ui } = globalScene;
-    if (ui.getMode() === UiMode.ALERT_MODAL) {
+    if (ui.mode === UiMode.ALERT_MODAL) {
       ui.revertMode()
         .then(() => playTween({ targets: this.overlay, alpha: 0, duration: 500, ease: "Sine.easeOut" }))
         .then(() => ui.remove(this.overlay, true));

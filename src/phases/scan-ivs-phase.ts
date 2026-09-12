@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/global-settings-manager";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BattlerIndex } from "#enums/battler-index";
 import { PERMANENT_STATS, type PermanentStat, Stat } from "#enums/stat";
@@ -10,7 +11,7 @@ import i18next from "i18next";
 
 export class ScanIvsPhase extends PokemonPhase {
   public readonly phaseName = "ScanIvsPhase";
-  // biome-ignore lint/complexity/noUselessConstructor: This changes `battlerIndex` to be required
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
@@ -41,7 +42,7 @@ export class ScanIvsPhase extends PokemonPhase {
       }
     }
 
-    if (globalScene.hideIvs) {
+    if (settings.general.hideIvScanner) {
       this.end();
       return;
     }
